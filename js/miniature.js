@@ -11,7 +11,7 @@ createArrPhotoContentData().forEach(({url, likes, comments}) => {
   pictureElement.querySelector('.picture__img').src = url;
   pictureElement.querySelector('.picture__likes').textContent = likes;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  userPicture.append(pictureElement);
+  pictureFragment.appendChild(pictureElement);
 });
 
-userPicture.append(pictureFragment);
+userPicture.appendChild(pictureFragment);
