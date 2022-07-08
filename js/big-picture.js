@@ -1,52 +1,53 @@
-import {createArrPhotoContentData} from './data.js';
+import {isEscapeKey} from './util.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-// bigPicture.classList.remove('hidden');
+const socialComments = bigPicture.querySelector('.social__comments');
+
 bigPictureCancel.addEventListener('click', () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 });
+
 document.addEventListener('keydown', (evt) => {
-  if (evt.key ==='Escape') {
+  if (isEscapeKey(evt)) {
     evt.preventDefault();
     bigPicture.classList.add('hidden');
     body.classList.remove('modal-open');
   }
 });
 
-if(!bigPicture.classList.contains('hidden')) {
+const createSocialCommentsTemplate = (comment) => (
+  `<li class="social__comment">
+    <img class="social__picture"
+      src="${comment.avatar}"
+      alt="${comment.name}"
+      width="35" height="35">
+    <p class="social__text">${comment.message}</p>
+</li>`
+);
+
+const renderSocialComents = (comments) => {
+  socialComments.innerHTML = '';
+
+  comments.forEach((comment) => {
+    socialComments.insertAdjacentHTML('beforeend', createSocialCommentsTemplate(comment));
+  });
+};
+
+const renderbigPicture = (({url, likes, comments, description}) => {
+  bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
+  bigPicture.querySelector('.likes-count').textContent = likes;
+  bigPicture.querySelector('.comments-count').textContent = comments.length;
+  bigPicture.querySelector('.social__caption').textContent = description;
+  bigPicture.classList.remove('hidden');
+
+  document.querySelector('.social__comment-count').classList.add('hidden');
+  document.querySelector('.comments-loader').classList.add('hidden');
   body.classList.add('modal-open');
-}
 
-const bigPictureImg = bigPicture.querySelector('.big-picture__img')
-  .querySelector('img');
-const likesCount = bigPicture.querySelector('.big-picture__social')
-  .querySelector('.likes-count');
-const commentsCount = bigPicture.querySelector('.social__comment-count')
-  .querySelector('.comments-count');
-const socialPicture = bigPicture.querySelectorAll('.social__comment .social__picture');
-const socialText = bigPicture.querySelectorAll('.social__comment .social__text');
-const socialCaption = bigPicture.querySelector('.big-picture__social')
-  .querySelector('.social__caption');
-
-createArrPhotoContentData().forEach(({url, likes, comments, description}) => {
-  bigPictureImg.src = url;
-  likesCount.textContent = likes;
-  commentsCount.textContent = comments.length;
-  socialPicture.forEach((element) => {
-    element.src = comments[0].avatar;
-    element.alt = comments[0].name;
-  });
-  socialText.forEach((element) => {
-    element.textContent = comments[0].message;
-  });
-  socialCaption.textContent = description;
+  renderSocialComents(comments);
 });
 
-const socialCommentsCount = bigPicture.querySelector('.social__comment-count');
-socialCommentsCount.classList.add('hidden');
-
-const commentsLoader = bigPicture.querySelector('.comments-loader');
-commentsLoader.classList.add('hidden');
+export {renderbigPicture};
