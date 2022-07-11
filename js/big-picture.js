@@ -1,22 +1,41 @@
-import {isEscapeKey} from './util.js';
+import {
+  isEscapeKey,
+  removeEventListener
+} from './util.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
+const conditionForRemoveEventListener = !body.classList.contains('modal-open');
 
-bigPictureCancel.addEventListener('click', () => {
+const modalClose = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
-});
+};
 
-document.addEventListener('keydown', (evt) => {
+const modalEscapeClose = (evt, eventType, handleEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    bigPicture.classList.add('hidden');
-    body.classList.remove('modal-open');
+    modalClose();
+    removeEventListener(conditionForRemoveEventListener, document, eventType, handleEventFunction);
   }
-});
+};
+
+const handleEvent = function (evt) {
+  switch (evt.type) {
+    case 'click':
+      modalClose();
+      removeEventListener(conditionForRemoveEventListener, bigPictureCancel, 'click', handleEvent);
+      break;
+    case 'keydown':
+      modalEscapeClose(evt, 'keydown', handleEvent);
+      break;
+    default:
+      modalClose();
+      break;
+  }
+};
 
 const createSocialCommentsTemplate = (comment) => (
   `<li class="social__comment">
@@ -36,18 +55,22 @@ const renderSocialComents = (comments) => {
   });
 };
 
-const renderbigPicture = (({url, likes, comments, description}) => {
+const renderBigPicture = (({url, likes, comments, description}) => {
+  bigPicture.classList.remove('hidden');
+
+  bigPictureCancel.addEventListener('click', handleEvent);
+  document.addEventListener('keydown', handleEvent);
+
+  document.querySelector('.social__comment-count').classList.add('hidden');
+  document.querySelector('.comments-loader').classList.add('hidden');
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.comments-count').textContent = comments.length;
   bigPicture.querySelector('.social__caption').textContent = description;
-  bigPicture.classList.remove('hidden');
 
-  document.querySelector('.social__comment-count').classList.add('hidden');
-  document.querySelector('.comments-loader').classList.add('hidden');
   body.classList.add('modal-open');
 
   renderSocialComents(comments);
 });
 
-export {renderbigPicture};
+export {renderBigPicture};

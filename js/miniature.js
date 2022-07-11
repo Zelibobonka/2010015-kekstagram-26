@@ -1,5 +1,5 @@
 import {createArrPhotoContentData} from './data.js';
-import {renderbigPicture} from './big-picture.js';
+import {renderBigPicture} from './big-picture.js';
 
 const userPicture = document.querySelector('.pictures');
 const similarPictureTemplate = document.querySelector('#picture')
@@ -12,7 +12,7 @@ createArrPhotoContentData().forEach(({url, likes, comments, description}) => {
   pictureElement.querySelector('.picture__img').src = url;
   pictureElement.querySelector('.picture__likes').textContent = likes;
   pictureElement.querySelector('.picture__comments').textContent = comments.length;
-  pictureElement.addEventListener('click', () => renderbigPicture({url, likes, comments, description}));
+  pictureElement.addEventListener('click', () => renderBigPicture({url, likes, comments, description}));
   pictureFragment.appendChild(pictureElement);
 });
 
