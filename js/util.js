@@ -7,4 +7,18 @@ const getRandomPositiveInteger = (a, b) => {
 
 const getRandomArrayElement = (arr) => arr[getRandomPositiveInteger(0, arr.length - 1)];
 
-export {getRandomPositiveInteger, getRandomArrayElement};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+const removeEventListener = (conditionForRemove, whereRemoveEventListener, eventType, handleEventFunction) => {
+  if (conditionForRemove) {
+    const element = whereRemoveEventListener;
+    element.removeEventListener(eventType, handleEventFunction);
+  }
+};
+
+export {
+  getRandomPositiveInteger,
+  getRandomArrayElement,
+  isEscapeKey,
+  removeEventListener
+};

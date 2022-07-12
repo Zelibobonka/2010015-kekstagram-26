@@ -1,3 +1,2 @@
-import {createArrPhotoContentData} from './data.js';
-
-createArrPhotoContentData();
+import './miniature.js';
+import './upload-img.js';
