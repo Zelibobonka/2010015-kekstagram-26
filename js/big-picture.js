@@ -55,7 +55,7 @@ const renderSocialComents = (comments) => {
   });
 };
 
-const renderBigPicture = (({url, likes, comments, description}) => {
+const renderBigPicture = ((url, likes, comments, description) => {
   bigPicture.classList.remove('hidden');
 
   bigPictureCancel.addEventListener('click', handleEvent);
