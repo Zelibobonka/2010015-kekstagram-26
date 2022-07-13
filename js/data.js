@@ -31,13 +31,11 @@ const userNames = [
 
 const createArrPhotoContentData = () => {
   const photoContentData = [];
-  const randomComments = []; // создаем пустой массив для рандомных комментариев
+  const randomComments = [];
 
   for (let i=1; i<=25; i++) {
     const likes = getRandomPositiveInteger(15, 200);
     const randomAvatar = getRandomPositiveInteger(1, 6);
-
-    // наполняем массив для комментариев рандомными комментариями
 
     randomComments.push({
       id: i + 1,
@@ -51,7 +49,7 @@ const createArrPhotoContentData = () => {
       url: `photos/${i}.jpg`,
       description: getRandomArrayElement(photoDescriptions),
       likes: likes,
-      comments: randomComments, // подставляем массив с комментариями
+      comments: randomComments,
     });
   }
   return photoContentData;
