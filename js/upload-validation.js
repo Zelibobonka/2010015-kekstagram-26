@@ -15,7 +15,9 @@ const isHashtegValid = (value) => re.test(value);
 
 const areHashtegsValid = (value) => {
   const hashtegs = getArrHashtags(value);
-
+  if (value.length === 0 && hashtegs.length === 1) {
+    return true;
+  }
   return hashtegs.every((hashteg) => isHashtegValid(hashteg));
 };
 
@@ -46,8 +48,9 @@ pristine.addValidator(hashtagText, isHashtegsUnique,
 );
 
 form.addEventListener('submit', (evt) => {
+  evt.preventDefault();
   const validForm = pristine.validate();
-  if(validForm) {
-    evt.preventDefault();
+  if (!validForm) {
+    return validForm;
   }
 });

@@ -52,12 +52,12 @@ fileUploader.addEventListener('change', () => {
 
 textHashtags.addEventListener('keydown', (evt) => {
   if (isEscapeKey(evt)) {
-    event.stopPropagation();
+    evt.stopPropagation();
   }
 });
 
 textDescription.addEventListener('keydown', (evt) => {
   if (isEscapeKey(evt)) {
-    event.stopPropagation();
+    evt.stopPropagation();
   }
 });
