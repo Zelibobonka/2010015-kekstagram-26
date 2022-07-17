@@ -6,7 +6,9 @@ import {
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
+const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialComments = bigPicture.querySelector('.social__comments');
+const socialCommentsLoader = bigPicture.querySelector('.social__comments-loader');
 const conditionForRemoveEventListener = !body.classList.contains('modal-open');
 
 const modalClose = () => {
@@ -61,8 +63,6 @@ const renderBigPicture = ((url, likes, comments, description) => {
   bigPictureCancel.addEventListener('click', handleEvent);
   document.addEventListener('keydown', handleEvent);
 
-  document.querySelector('.social__comment-count').classList.add('hidden');
-  document.querySelector('.comments-loader').classList.add('hidden');
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.comments-count').textContent = comments.length;
@@ -71,6 +71,28 @@ const renderBigPicture = ((url, likes, comments, description) => {
   body.classList.add('modal-open');
 
   renderSocialComents(comments);
+
+  const arrSocialComments = Array.from(bigPicture.querySelectorAll('.social__comment'));
+  const step = 5;
+  let item = 0;
+
+  arrSocialComments
+    .slice(step)
+    .forEach((elem) => elem.classList.add('hidden'));
+
+  item += step;
+
+  socialCommentsLoader.addEventListener('click', () => {
+    const tmp = arrSocialComments.slice(item, item + step);
+    tmp.forEach((e) => e.classList.remove('hidden'));
+    item += step;
+    const socialCommentCountHidden = Array.from(bigPicture.querySelectorAll('.social__comment.hidden'));
+    socialCommentCount.innerHTML = `${arrSocialComments.length - socialCommentCountHidden.length} из <span class="comments-count">${comments.length}</span> комментариев`;
+
+    if (item >= arrSocialComments.length) {
+      socialCommentsLoader.classList.add('hidden');
+    }
+  });
 });
 
 export {renderBigPicture};
