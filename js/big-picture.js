@@ -3,10 +3,16 @@ import {
   removeEventListener
 } from './util.js';
 
+import {
+  uploadMoreComments,
+  clearCommentMarkupCounterState,
+  handlerSocialComments,
+  addEventListenerSocialCommentsLoader
+} from './upload_more_comments.js';
+
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const socialComments = bigPicture.querySelector('.social__comments');
 const socialCommentsLoader = bigPicture.querySelector('.social__comments-loader');
 const conditionForRemoveEventListener = !body.classList.contains('modal-open');
@@ -16,22 +22,27 @@ const modalClose = () => {
   body.classList.remove('modal-open');
 };
 
-const modalEscapeClose = (evt, eventType, handleEventFunction) => {
+const modalEscapeClose = (evt, eventType, handlerEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     modalClose();
-    removeEventListener(conditionForRemoveEventListener, document, eventType, handleEventFunction);
+    removeEventListener(conditionForRemoveEventListener, document, eventType, handlerEventFunction);
   }
 };
 
-const handleEvent = function (evt) {
+const handlerEventBigPicture = (evt) => {
   switch (evt.type) {
     case 'click':
       modalClose();
-      removeEventListener(conditionForRemoveEventListener, bigPictureCancel, 'click', handleEvent);
+      removeEventListener(conditionForRemoveEventListener, bigPictureCancel, 'click', handlerEventBigPicture);
+      removeEventListener(conditionForRemoveEventListener, document, 'keydown', handlerEventBigPicture);
+      removeEventListener(conditionForRemoveEventListener, socialCommentsLoader, 'click', handlerSocialComments);
+      clearCommentMarkupCounterState();
       break;
     case 'keydown':
-      modalEscapeClose(evt, 'keydown', handleEvent);
+      modalEscapeClose(evt, 'keydown', handlerEventBigPicture);
+      removeEventListener(conditionForRemoveEventListener, socialCommentsLoader, 'click', handlerSocialComments);
+      clearCommentMarkupCounterState();
       break;
     default:
       modalClose();
@@ -49,7 +60,7 @@ const createSocialCommentsTemplate = (comment) => (
 </li>`
 );
 
-const renderSocialComents = (comments) => {
+const renderSocialComments = (comments) => {
   socialComments.innerHTML = '';
 
   comments.forEach((comment) => {
@@ -59,9 +70,10 @@ const renderSocialComents = (comments) => {
 
 const renderBigPicture = ((url, likes, comments, description) => {
   bigPicture.classList.remove('hidden');
+  socialCommentsLoader.classList.remove('hidden');
 
-  bigPictureCancel.addEventListener('click', handleEvent);
-  document.addEventListener('keydown', handleEvent);
+  bigPictureCancel.addEventListener('click', handlerEventBigPicture);
+  document.addEventListener('keydown', handlerEventBigPicture);
 
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
@@ -70,29 +82,9 @@ const renderBigPicture = ((url, likes, comments, description) => {
 
   body.classList.add('modal-open');
 
-  renderSocialComents(comments);
-
-  const arrSocialComments = Array.from(bigPicture.querySelectorAll('.social__comment'));
-  const step = 5;
-  let item = 0;
-
-  arrSocialComments
-    .slice(step)
-    .forEach((elem) => elem.classList.add('hidden'));
-
-  item += step;
-
-  socialCommentsLoader.addEventListener('click', () => {
-    const tmp = arrSocialComments.slice(item, item + step);
-    tmp.forEach((e) => e.classList.remove('hidden'));
-    item += step;
-    const socialCommentCountHidden = Array.from(bigPicture.querySelectorAll('.social__comment.hidden'));
-    socialCommentCount.innerHTML = `${arrSocialComments.length - socialCommentCountHidden.length} из <span class="comments-count">${comments.length}</span> комментариев`;
-
-    if (item >= arrSocialComments.length) {
-      socialCommentsLoader.classList.add('hidden');
-    }
-  });
+  renderSocialComments(comments);
+  uploadMoreComments();
+  addEventListenerSocialCommentsLoader();
 });
 
 export {renderBigPicture};
