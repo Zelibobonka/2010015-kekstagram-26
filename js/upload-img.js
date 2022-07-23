@@ -18,23 +18,23 @@ const modalClose = () => {
   body.classList.remove('modal-open');
 };
 
-const modalEscapeClose = (evt, eventType, handleEventFunction) => {
+const modalEscapeClose = (evt, eventType, handlerEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     modalClose();
-    removeEventListener(conditionForRemoveEventListener, document, eventType, handleEventFunction);
+    removeEventListener(conditionForRemoveEventListener, document, eventType, handlerEventFunction);
   }
 };
 
-const handleEvent = function (evt) {
+const handlerEventUploadImg = (evt) => {
   switch (evt.type) {
     case 'click':
       modalClose();
-      removeEventListener(conditionForRemoveEventListener, uploadCancel, 'click', handleEvent);
+      removeEventListener(conditionForRemoveEventListener, uploadCancel, 'click', handlerEventUploadImg);
       fileUploader.value = '';
       break;
     case 'keydown':
-      modalEscapeClose(evt, 'keydown', handleEvent);
+      modalEscapeClose(evt, 'keydown', handlerEventUploadImg);
       fileUploader.value = '';
       break;
     default:
@@ -46,8 +46,8 @@ const handleEvent = function (evt) {
 fileUploader.addEventListener('change', () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
-  uploadCancel.addEventListener('click', handleEvent);
-  document.addEventListener('keydown', handleEvent);
+  uploadCancel.addEventListener('click', handlerEventUploadImg);
+  document.addEventListener('keydown', handlerEventUploadImg);
 });
 
 textHashtags.addEventListener('keydown', (evt) => {

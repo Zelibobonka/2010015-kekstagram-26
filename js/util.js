@@ -1,3 +1,11 @@
+const COMMENTS_COUNTER_STEP = 5;
+
+const getInitialCommentCounterState = (count = 0) => {
+  let initialCommentCounterState = count;
+  initialCommentCounterState += COMMENTS_COUNTER_STEP;
+  return initialCommentCounterState;
+};
+
 const getRandomPositiveInteger = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
   const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
@@ -20,5 +28,7 @@ export {
   getRandomPositiveInteger,
   getRandomArrayElement,
   isEscapeKey,
-  removeEventListener
+  removeEventListener,
+  COMMENTS_COUNTER_STEP,
+  getInitialCommentCounterState
 };

@@ -11,39 +11,39 @@ const getArrHashtags = (value) => value.split(' ');
 
 const re = /^#[A-Za-zА-яа-яЕё0-9]{1,19}$/;
 
-const isHashtegValid = (value) => re.test(value);
+const isHashtagValid = (value) => re.test(value);
 
-const areHashtegsValid = (value) => {
-  const hashtegs = getArrHashtags(value);
-  if (value.length === 0 && hashtegs.length === 1) {
+const areHashtagsValid = (value) => {
+  const hashtags = getArrHashtags(value);
+  if (value.length === 0 && hashtags.length === 1) {
     return true;
   }
-  return hashtegs.every((hashteg) => isHashtegValid(hashteg));
+  return hashtags.every((hashtag) => isHashtagValid(hashtag));
 };
 
-pristine.addValidator(hashtagText, areHashtegsValid,
+pristine.addValidator(hashtagText, areHashtagsValid,
   'Проблема синтаксиса'
 );
 
-const isHashtegsCountValid = (value) => {
-  const hashtegs = getArrHashtags(value);
+const isHashtagsCountValid = (value) => {
+  const hashtags = getArrHashtags(value);
 
-  return (hashtegs.length <= 5);
+  return (hashtags.length <= 5);
 };
 
-pristine.addValidator(hashtagText, isHashtegsCountValid,
+pristine.addValidator(hashtagText, isHashtagsCountValid,
   'Количество хештегов - не более пяти'
 );
 
-const isHashtegsUnique = (value) => {
-  const hashtegs = getArrHashtags(value);
-  const lowercaseHashteg = hashtegs.map((hashteg) => hashteg.toLowerCase());
-  const set = new Set(lowercaseHashteg);
+const isHashtagsUnique = (value) => {
+  const hashtags = getArrHashtags(value);
+  const lowercaseHashtag = hashtags.map((hashtag) => hashtag.toLowerCase());
+  const set = new Set(lowercaseHashtag);
 
-  return (set.size === lowercaseHashteg.length);
+  return (set.size === lowercaseHashtag.length);
 };
 
-pristine.addValidator(hashtagText, isHashtegsUnique,
+pristine.addValidator(hashtagText, isHashtagsUnique,
   'Каждый хэштег должен быть уникальным'
 );
 
