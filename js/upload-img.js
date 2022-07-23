@@ -3,6 +3,8 @@ import {
   removeEventListener
 } from './util.js';
 
+import {resetSlider} from './effects.js';
+
 const body = document.querySelector('body');
 const imgUpload = document.querySelector('.img-upload');
 const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
@@ -10,6 +12,9 @@ const fileUploader = imgUpload.querySelector('#upload-file');
 const uploadCancel = imgUpload.querySelector('#upload-cancel');
 const textHashtags = imgUpload.querySelector('.text__hashtags');
 const textDescription = imgUpload.querySelector('.text__description');
+const imgUploadPreview = imgUpload.querySelector('.img-upload__preview img');
+const imgUploadEffectLevel = imgUpload.querySelector('.img-upload__effect-level');
+const scaleControlValue = imgUpload.querySelector('.scale__control--value');
 const conditionForRemoveEventListener = !body.classList.contains('modal-open');
 
 
@@ -48,6 +53,10 @@ fileUploader.addEventListener('change', () => {
   body.classList.add('modal-open');
   uploadCancel.addEventListener('click', handlerEventUploadImg);
   document.addEventListener('keydown', handlerEventUploadImg);
+  imgUploadPreview.style.transform=`scale(${1})`;
+  imgUploadEffectLevel.classList.add('hidden');
+  scaleControlValue.value = `${100}%`;
+  resetSlider();
 });
 
 textHashtags.addEventListener('keydown', (evt) => {
