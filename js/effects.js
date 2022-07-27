@@ -1,6 +1,5 @@
 const imgUpload = document.querySelector('.img-upload');
 const imgUploadPreview = imgUpload.querySelector('.img-upload__preview img');
-const uploadEffects = imgUpload.querySelector('.effects__list');
 const imgUploadEffectLevel = imgUpload.querySelector('.img-upload__effect-level');
 const effectLevel = imgUpload.querySelector('.effect-level__value');
 const sliderElement = imgUpload.querySelector('.effect-level__slider');
@@ -35,6 +34,7 @@ const resetSlider = () => {
     step: 0.1,
   });
   imgUploadPreview.classList.remove(`effects__preview--${currentEffect}`);
+  imgUploadPreview.classList.add('effects__preview--none');
 };
 
 const onEffectChange = (evt) => {
@@ -44,7 +44,7 @@ const onEffectChange = (evt) => {
 
   hideSlider();
 
-  switch(currentEffect) {
+  switch (currentEffect) {
     case 'none' || 'chrome' || 'sepia':
       resetSlider();
       break;
@@ -83,7 +83,7 @@ const onEffectChange = (evt) => {
   sliderElement.noUiSlider.on('update', () => {
     effectLevel.value = sliderElement.noUiSlider.get();
 
-    switch(currentEffect) {
+    switch (currentEffect) {
       case 'none':
         imgUploadPreview.style.filter = 'none';
         break;
@@ -106,6 +106,7 @@ const onEffectChange = (evt) => {
   });
 };
 
-uploadEffects.addEventListener('change', onEffectChange);
-
-export {resetSlider};
+export {
+  resetSlider,
+  onEffectChange,
+};
