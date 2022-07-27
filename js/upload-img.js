@@ -37,10 +37,14 @@ const handlerEventUploadImg = (evt) => {
       modalClose();
       removeEventListener(conditionForRemoveEventListener, uploadCancel, 'click', handlerEventUploadImg);
       fileUploader.value = '';
+      resetSlider();
+      imgUploadPreview.style.filter = 'none';
       break;
     case 'keydown':
       modalEscapeClose(evt, 'keydown', handlerEventUploadImg);
       fileUploader.value = '';
+      resetSlider();
+      imgUploadPreview.style.filter = 'none';
       break;
     default:
       modalClose();
@@ -56,7 +60,6 @@ fileUploader.addEventListener('change', () => {
   imgUploadPreview.style.transform=`scale(${1})`;
   imgUploadEffectLevel.classList.add('hidden');
   scaleControlValue.value = `${100}%`;
-  resetSlider();
 });
 
 textHashtags.addEventListener('keydown', (evt) => {
