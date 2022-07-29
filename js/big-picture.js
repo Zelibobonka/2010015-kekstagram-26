@@ -1,32 +1,30 @@
 import {
   isEscapeKey,
-  removeEventListener
+  removeEventListener,
 } from './util.js';
-
 import {
   uploadMoreComments,
   clearCommentMarkupCounterState,
   handlerSocialComments,
-  addEventListenerSocialCommentsLoader
-} from './upload_more_comments.js';
+  addEventListenerSocialCommentsLoader,
+} from './upload-more-comments.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
 const socialComments = bigPicture.querySelector('.social__comments');
 const socialCommentsLoader = bigPicture.querySelector('.social__comments-loader');
-const conditionForRemoveEventListener = !body.classList.contains('modal-open');
 
 const modalClose = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 };
 
-const modalEscapeClose = (evt, eventType, handlerEventFunction) => {
+const modalEscapeClose = (evt, eventType, handleEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
     modalClose();
-    removeEventListener(conditionForRemoveEventListener, document, eventType, handlerEventFunction);
+    removeEventListener(document, eventType, handleEventFunction);
   }
 };
 
@@ -34,14 +32,14 @@ const handlerEventBigPicture = (evt) => {
   switch (evt.type) {
     case 'click':
       modalClose();
-      removeEventListener(conditionForRemoveEventListener, bigPictureCancel, 'click', handlerEventBigPicture);
-      removeEventListener(conditionForRemoveEventListener, document, 'keydown', handlerEventBigPicture);
-      removeEventListener(conditionForRemoveEventListener, socialCommentsLoader, 'click', handlerSocialComments);
+      removeEventListener(bigPictureCancel, 'click', handlerEventBigPicture);
+      removeEventListener(document, 'keydown', handlerEventBigPicture); //
+      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments); //
       clearCommentMarkupCounterState();
       break;
     case 'keydown':
       modalEscapeClose(evt, 'keydown', handlerEventBigPicture);
-      removeEventListener(conditionForRemoveEventListener, socialCommentsLoader, 'click', handlerSocialComments);
+      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments); //
       clearCommentMarkupCounterState();
       break;
     default:
@@ -87,4 +85,7 @@ const renderBigPicture = ((url, likes, comments, description) => {
   addEventListenerSocialCommentsLoader();
 });
 
-export {renderBigPicture};
+
+export {
+  renderBigPicture,
+};
