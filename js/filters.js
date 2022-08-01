@@ -1,13 +1,12 @@
-import {renderArrPhotoContentData} from './miniature.js';
-import {getRandomPositiveInteger, debounce} from './util.js';
-
+import { renderArrPhotoContentData } from './miniature.js';
+import { getRandomPositiveInteger, debounce } from './util.js';
 
 const RANDOM_QUANTITY = 10;
 
-const imgFilters = document.querySelector('.img-filters');
-const filterDefault = imgFilters.querySelector('#filter-default');
-const filterRandom = imgFilters.querySelector('#filter-random');
-const filterDiscussed = imgFilters.querySelector('#filter-discussed');
+const imgFilter = document.querySelector('.img-filters');
+const filterButtonDefault = imgFilter.querySelector('#filter-default');
+const filterButtonRandom = imgFilter.querySelector('#filter-random');
+const filterButtonDiscussed = imgFilter.querySelector('#filter-discussed');
 
 const compareComments = (photoA, photoB) => {
   const rankA = photoA.comments.length;
@@ -22,7 +21,7 @@ const getRandomUniqueElements = (arr) => {
   const elements = [];
   const newArrayLength = arr.length;
   for (let i = 0; i < newArrayLength; i++) {
-    const randomId = getRandomPositiveInteger(0, newArray.length- 1);
+    const randomId = getRandomPositiveInteger(0, newArray.length - 1);
     elements.push(newArray[randomId]);
     newArray.splice(randomId, 1);
   }
@@ -57,30 +56,32 @@ const renderPicturesFilter = (pictures) => {
 };
 
 const showFilteredPictures = (pictures) => {
-  imgFilters.classList.remove('img-filters--inactive');
-  filterDefault.addEventListener('click', debounce((evt) => {
+  imgFilter.classList.remove('img-filters--inactive');
+  filterButtonDefault.addEventListener('click', debounce((evt) => {
     removeActiveClass();
-    if (evt.target === filterDefault) {
-      filterDefault.classList.add('img-filters__button--active');
+    if (evt.target === filterButtonDefault) {
+      filterButtonDefault.classList.add('img-filters__button--active');
     }
     renderPicturesFilter(createDefaultFilter(pictures));
   }));
 
-  filterRandom.addEventListener('click', debounce((evt) => {
+  filterButtonRandom.addEventListener('click', debounce((evt) => {
     removeActiveClass();
-    if (evt.target === filterRandom) {
-      filterRandom.classList.add('img-filters__button--active');
+    if (evt.target === filterButtonRandom) {
+      filterButtonRandom.classList.add('img-filters__button--active');
     }
     renderPicturesFilter(createRandomFilter(pictures));
   }));
 
-  filterDiscussed.addEventListener('click', debounce((evt) => {
+  filterButtonDiscussed.addEventListener('click', debounce((evt) => {
     removeActiveClass();
-    if (evt.target === filterDiscussed) {
-      filterDiscussed.classList.add('img-filters__button--active');
+    if (evt.target === filterButtonDiscussed) {
+      filterButtonDiscussed.classList.add('img-filters__button--active');
     }
     renderPicturesFilter(createDiscussedFilter(pictures));
   }));
 };
 
-export {showFilteredPictures};
+export {
+  showFilteredPictures
+};

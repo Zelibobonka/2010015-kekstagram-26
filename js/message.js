@@ -1,15 +1,15 @@
 import { isEscapeKey, removeEventListener } from './util.js';
 
 const body = document.querySelector('body');
-const imgUpload = document.querySelector('.img-upload');
-const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
+const uploadImg = document.querySelector('.img-upload');
+const uploadImgOverlay = uploadImg.querySelector('.img-upload__overlay');
 const error = document.querySelector('.error');
 const success = document.querySelector('.success');
 const errorButton = document.querySelector('.error__button');
 const successButton = document.querySelector('.success__button');
 
 const openEditFormForResend = () => {
-  imgUploadOverlay.classList.remove('hidden');
+  uploadImgOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
 };
 

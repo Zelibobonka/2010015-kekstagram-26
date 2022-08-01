@@ -1,23 +1,23 @@
-const imgUpload = document.querySelector('.img-upload');
-const scaleControlSmaller = imgUpload.querySelector('.scale__control--smaller');
-const scaleControlValue = imgUpload.querySelector('.scale__control--value');
-const scaleControlBigger = imgUpload.querySelector('.scale__control--bigger');
-const imgUploadPreview = imgUpload.querySelector('.img-upload__preview img');
+const uploadImg = document.querySelector('.img-upload');
+const controlScaleSmall = uploadImg.querySelector('.scale__control--smaller');
+const controlScaleValue = uploadImg.querySelector('.scale__control--value');
+const controlScaleBig = uploadImg.querySelector('.scale__control--bigger');
+const uploadImgPreview = uploadImg.querySelector('.img-upload__preview img');
 
-scaleControlBigger.addEventListener('click', () => {
-  let maxValue = parseInt(scaleControlValue.value, 10) + 25;
-  if (maxValue > 100) {
-    maxValue = 100;
+controlScaleBig.addEventListener('click', () => {
+  let maxScaleValue = parseInt(controlScaleValue.value, 10) + 25;
+  if (maxScaleValue > 100) {
+    maxScaleValue = 100;
   }
-  imgUploadPreview.style.transform = `scale(${maxValue/100})`;
-  scaleControlValue.value = `${maxValue}%`;
+  uploadImgPreview.style.transform = `scale(${maxScaleValue/100})`;
+  controlScaleValue.value = `${maxScaleValue}%`;
 });
 
-scaleControlSmaller.addEventListener('click', () => {
-  let minValue = parseInt(scaleControlValue.value, 10) - 25;
-  if (minValue < 25) {
-    minValue = 25;
+controlScaleSmall.addEventListener('click', () => {
+  let minScaleValue = parseInt(controlScaleValue.value, 10) - 25;
+  if (minScaleValue < 25) {
+    minScaleValue = 25;
   }
-  imgUploadPreview.style.transform = `scale(${minValue/100})`;
-  scaleControlValue.value = `${minValue}%`;
+  uploadImgPreview.style.transform = `scale(${minScaleValue/100})`;
+  controlScaleValue.value = `${minScaleValue}%`;
 });

@@ -1,7 +1,7 @@
 import { renderBigPicture } from './big-picture.js';
 
 const userPicture = document.querySelector('.pictures');
-const similarPictureTemplate = document.querySelector('#picture')
+const pictureTemplate = document.querySelector('#picture')
   .content
   .querySelector('.picture');
 
@@ -14,7 +14,7 @@ const renderArrPhotoContentData = (photoContent) => {
     comments,
     description
   }) => {
-    const pictureElement = similarPictureTemplate.cloneNode(true);
+    const pictureElement = pictureTemplate.cloneNode(true);
     pictureElement.querySelector('.picture__img').src = url;
     pictureElement.querySelector('.picture__likes').textContent = likes;
     pictureElement.querySelector('.picture__comments').textContent = comments.length;
