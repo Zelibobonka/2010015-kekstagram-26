@@ -1,4 +1,7 @@
-import { COMMENTS_COUNTER_STEP, getInitialCommentCounterState } from './util.js';
+import {
+  COMMENTS_COUNTER_STEP,
+  getInitialCommentCounterState
+} from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 const socialCommentCount = bigPicture.querySelector('.social__comment-count');
@@ -22,7 +25,8 @@ const createSocialCommentsCounterTemplate = (initCommentCounterStep) => (
 );
 
 const clearCommentMarkupCounterState = () => {
-  socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(commentCounterStep);
+  socialCommentCount.textContent = '';
+  socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(commentCounterStep));
 };
 
 const hiddenSocialCommentsLoader = () => {
@@ -37,7 +41,8 @@ const handlerSocialComments = () => {
 
   initialCommentCounterState += commentCounterStep;
 
-  socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(arrSocialComments.length - getHiddenCommentsData().length);
+  socialCommentCount.textContent = '';
+  socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(arrSocialComments.length - getHiddenCommentsData().length));
 
   if (initialCommentCounterState === arrSocialComments.length || initialCommentCounterState > arrSocialComments.length) {
     hiddenSocialCommentsLoader();
@@ -47,7 +52,8 @@ const handlerSocialComments = () => {
 const uploadMoreComments = () => {
   const arrSocialComments = getCommentsData();
   if (((getCommentsData().length < commentCounterStep) || (getCommentsData().length === commentCounterStep)) && (getHiddenCommentsData().length === 0)) {
-    socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(getCommentsData().length);
+    socialCommentCount.textContent = '';
+    socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(getCommentsData().length));
     hiddenSocialCommentsLoader();
     return;
   }

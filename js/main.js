@@ -4,6 +4,7 @@ import './upload-validation.js';
 import './scale-upload-img.js';
 import './effects.js';
 import './message.js';
+import {showFilteredPictures} from './filters.js';
 import { modalClose, resetUploadImgFormData } from './upload-img.js';
 import { setUserFormSubmit } from './upload-validation.js';
 import { renderArrPhotoContentData } from './miniature.js';
@@ -20,6 +21,7 @@ getData(
   (photo) => {
     document.querySelector('.img-upload__message--loading').classList.add('hidden');
     renderArrPhotoContentData(photo);
+    showFilteredPictures(photo);
   },
   () => {
     showMessageGetDataError();

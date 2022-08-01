@@ -1,6 +1,8 @@
 import { isEscapeKey, removeEventListener } from './util.js';
 import { onEffectChange, resetSlider } from './effects.js';
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const body = document.querySelector('body');
 const imgUpload = document.querySelector('.img-upload');
 const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
@@ -23,13 +25,7 @@ const resetUploadImgFormData = () => {
   resetSlider();
   initialStateUploadImgFormData();
   fileUploader.value = '';
-  uploadEffects.forEach((element) => {
-    if (element.value === 'none') {
-      element.checked = true;
-    } else {
-      element.checked = false;
-    }
-  });
+  uploadEffects.forEach((element) => { element.checked = element.value === 'none'; });
   imgUploadPreview.style.filter = 'none';
   textHashtags.value = '';
   textDescription.value = '';
@@ -88,6 +84,15 @@ const handlerEventUploadImg = (evt) => {
 const handlerUploadImg = () => {
   imgUploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
+
+  const file = fileUploader.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    imgUploadPreview.src = URL.createObjectURL(file);
+  }
 
   initialStateUploadImgFormData();
 
