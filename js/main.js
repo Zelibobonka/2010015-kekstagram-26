@@ -5,14 +5,14 @@ import './scale-upload-img.js';
 import './effects.js';
 import './message.js';
 import {showFilteredPictures} from './filters.js';
-import { modalClose, resetUploadImgFormData } from './upload-img.js';
+import { closeModal, resetUploadImgFormData } from './upload-img.js';
 import { setUserFormSubmit } from './upload-validation.js';
 import { renderArrPhotoContentData } from './miniature.js';
 import { getData } from './api.js';
 import { showMessageGetDataError } from './message.js';
 
 const resetUploadImgFormDataBeforeSuccess = () => {
-  modalClose();
+  closeModal();
   resetUploadImgFormData();
 };
 
@@ -28,4 +28,4 @@ getData(
   }
 );
 
-setUserFormSubmit(resetUploadImgFormDataBeforeSuccess, modalClose);
+setUserFormSubmit(resetUploadImgFormDataBeforeSuccess, closeModal);

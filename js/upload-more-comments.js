@@ -29,12 +29,12 @@ const clearCommentMarkupCounterState = () => {
   socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(commentCounterStep));
 };
 
-const hiddenSocialCommentsLoader = () => {
+const hideSocialCommentsLoader = () => {
   socialCommentsLoader.classList.add('hidden');
   initialCommentCounterState = getInitialCommentCounterState(0);
 };
 
-const handlerSocialComments = () => {
+const handleSocialComments = () => {
   const arrSocialComments = getCommentsData();
   const showFollowingComments = arrSocialComments.slice(initialCommentCounterState, initialCommentCounterState + commentCounterStep);
   showFollowingComments.forEach((elem) => elem.classList.remove('hidden'));
@@ -45,7 +45,7 @@ const handlerSocialComments = () => {
   socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(arrSocialComments.length - getHiddenCommentsData().length));
 
   if (initialCommentCounterState === arrSocialComments.length || initialCommentCounterState > arrSocialComments.length) {
-    hiddenSocialCommentsLoader();
+    hideSocialCommentsLoader();
   }
 };
 
@@ -54,7 +54,7 @@ const uploadMoreComments = () => {
   if (((getCommentsData().length < commentCounterStep) || (getCommentsData().length === commentCounterStep)) && (getHiddenCommentsData().length === 0)) {
     socialCommentCount.textContent = '';
     socialCommentCount.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(getCommentsData().length));
-    hiddenSocialCommentsLoader();
+    hideSocialCommentsLoader();
     return;
   }
   arrSocialComments
@@ -65,12 +65,12 @@ const uploadMoreComments = () => {
 };
 
 const addEventListenerSocialCommentsLoader = () => {
-  socialCommentsLoader.addEventListener('click', handlerSocialComments);
+  socialCommentsLoader.addEventListener('click', handleSocialComments);
 };
 
 export {
   uploadMoreComments,
   clearCommentMarkupCounterState,
-  handlerSocialComments,
+  handleSocialComments,
   addEventListenerSocialCommentsLoader
 };

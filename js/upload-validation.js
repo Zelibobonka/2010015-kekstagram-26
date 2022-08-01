@@ -6,7 +6,7 @@ const form = imgUpload.querySelector('#upload-select-image');
 const hashtagText = imgUpload.querySelector('.text__hashtags');
 const submitButton = imgUpload.querySelector('.img-upload__submit');
 
-const regex = /^#[A-Za-zА-яа-яЕё0-9]{1,19}$/;
+const isHashtagValidRegex = /^#[A-Za-zА-яа-яЕё0-9]{1,19}$/;
 
 const pristine = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
@@ -15,7 +15,7 @@ const pristine = new Pristine(form, {
 
 const getArrHashtags = (value) => value.split(' ');
 
-const isHashtagValid = (value) => regex.test(value);
+const isHashtagValid = (value) => isHashtagValidRegex.test(value);
 
 const areHashtagsValid = (value) => {
   const hashtags = getArrHashtags(value);
