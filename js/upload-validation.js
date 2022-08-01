@@ -1,52 +1,52 @@
 import { sendData } from './api.js';
 import { showMessageSuccess, showMessageError } from './message.js';
 
-const imgUpload = document.querySelector('.img-upload');
-const form = imgUpload.querySelector('#upload-select-image');
-const hashtagText = imgUpload.querySelector('.text__hashtags');
-const submitButton = imgUpload.querySelector('.img-upload__submit');
+const uploadImg = document.querySelector('.img-upload');
+const form = uploadImg.querySelector('#upload-select-image');
+const inputHashtag = uploadImg.querySelector('.text__hashtags');
+const submitButton = uploadImg.querySelector('.img-upload__submit');
 
-const re = /^#[A-Za-zА-яа-яЕё0-9]{1,19}$/;
+const isHashtagValidRegex = /^#[A-Za-zА-яа-яЕё0-9]{1,19}$/;
 
-const pristine = new Pristine(form, {
+const setPristineSetting = new Pristine(form, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper'
 }, true);
 
 const getArrHashtags = (value) => value.split(' ');
 
-const isHashtagValid = (value) => re.test(value);
+const isHashtagValid = (value) => isHashtagValidRegex.test(value);
 
-const areHashtagsValid = (value) => {
-  const hashtags = getArrHashtags(value);
-  if (value.length === 0 && hashtags.length === 1) {
+const areHashtagValid = (value) => {
+  const arrHashtags = getArrHashtags(value);
+  if (value.length === 0 && arrHashtags.length === 1) {
     return true;
   }
-  return hashtags.every((hashtag) => isHashtagValid(hashtag));
+  return arrHashtags.every((hashtag) => isHashtagValid(hashtag));
 };
 
-pristine.addValidator(hashtagText, areHashtagsValid,
+setPristineSetting.addValidator(inputHashtag, areHashtagValid,
   'Проблема синтаксиса'
 );
 
 const isHashtagsCountValid = (value) => {
-  const hashtags = getArrHashtags(value);
-  return (hashtags.length <= 5);
+  const arrHashtags = getArrHashtags(value);
+  return (arrHashtags.length <= 5);
 };
 
-pristine.addValidator(hashtagText, isHashtagsCountValid,
+setPristineSetting.addValidator(inputHashtag, isHashtagsCountValid,
   'Количество хештегов - не более пяти'
 );
 
 const isHashtagsUnique = (value) => {
-  const hashtags = getArrHashtags(value);
-  const lowercaseHashtag = hashtags.map((hashtag) => hashtag.toLowerCase());
-  const set = new Set(lowercaseHashtag);
+  const arrHashtags = getArrHashtags(value);
+  const getLowercaseHashtag = arrHashtags.map((hashtag) => hashtag.toLowerCase());
+  const set = new Set(getLowercaseHashtag);
 
-  return (set.size === lowercaseHashtag.length);
+  return (set.size === getLowercaseHashtag.length);
 };
 
-pristine.addValidator(hashtagText, isHashtagsUnique,
+setPristineSetting.addValidator(inputHashtag, isHashtagsUnique,
   'Каждый хэштег должен быть уникальным'
 );
 
@@ -64,7 +64,7 @@ const setUserFormSubmit = (onSuccessModalAction, onErrorModalAction) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
-    const isValid = pristine.validate();
+    const isValid = setPristineSetting.validate();
     if (isValid) {
       blockSubmitButton();
       sendData(

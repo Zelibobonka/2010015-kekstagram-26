@@ -1,46 +1,46 @@
 import { isEscapeKey, removeEventListener } from './util.js';
 import {
-  uploadMoreComments,
+  uploadMoreComment,
   clearCommentMarkupCounterState,
-  handlerSocialComments,
+  handleSocialComments,
   addEventListenerSocialCommentsLoader
 } from './upload-more-comments.js';
 
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
-const bigPictureCancel = bigPicture.querySelector('.big-picture__cancel');
-const socialComments = bigPicture.querySelector('.social__comments');
-const socialCommentsLoader = bigPicture.querySelector('.social__comments-loader');
+const cancelBigPictureButton = bigPicture.querySelector('.big-picture__cancel');
+const socialCommentList = bigPicture.querySelector('.social__comments');
+const socialCommentLoaderButton = bigPicture.querySelector('.social__comments-loader');
 
-const modalClose = () => {
+const closeModal = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
 };
 
-const modalEscapeClose = (evt, eventType, handleEventFunction) => {
+const closeModalByEscape = (evt, typeOfEvent, handleEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    modalClose();
-    removeEventListener(document, eventType, handleEventFunction);
+    closeModal();
+    removeEventListener(document, typeOfEvent, handleEventFunction);
   }
 };
 
-const handlerEventBigPicture = (evt) => {
+const handleEventBigPicture = (evt) => {
   switch (evt.type) {
     case 'click':
-      modalClose();
-      removeEventListener(bigPictureCancel, 'click', handlerEventBigPicture);
-      removeEventListener(document, 'keydown', handlerEventBigPicture);
-      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments);
+      closeModal();
+      removeEventListener(cancelBigPictureButton, 'click', handleEventBigPicture);
+      removeEventListener(document, 'keydown', handleEventBigPicture);
+      removeEventListener(socialCommentLoaderButton, 'click', handleSocialComments);
       clearCommentMarkupCounterState();
       break;
     case 'keydown':
-      modalEscapeClose(evt, 'keydown', handlerEventBigPicture);
-      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments);
+      closeModalByEscape(evt, 'keydown', handleEventBigPicture);
+      removeEventListener(socialCommentLoaderButton, 'click', handleSocialComments);
       clearCommentMarkupCounterState();
       break;
     default:
-      modalClose();
+      closeModal();
       break;
   }
 };
@@ -56,19 +56,19 @@ const createSocialCommentsTemplate = (comment) => (
 );
 
 const renderSocialComments = (comments) => {
-  socialComments.innerHTML = '';
+  socialCommentList.textContent = '';
 
   comments.forEach((comment) => {
-    socialComments.insertAdjacentHTML('beforeend', createSocialCommentsTemplate(comment));
+    socialCommentList.insertAdjacentHTML('beforeend', createSocialCommentsTemplate(comment));
   });
 };
 
 const renderBigPicture = ((url, likes, comments, description) => {
   bigPicture.classList.remove('hidden');
-  socialCommentsLoader.classList.remove('hidden');
+  socialCommentLoaderButton.classList.remove('hidden');
 
-  bigPictureCancel.addEventListener('click', handlerEventBigPicture);
-  document.addEventListener('keydown', handlerEventBigPicture);
+  cancelBigPictureButton.addEventListener('click', handleEventBigPicture);
+  document.addEventListener('keydown', handleEventBigPicture);
 
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = url;
   bigPicture.querySelector('.likes-count').textContent = likes;
@@ -78,7 +78,7 @@ const renderBigPicture = ((url, likes, comments, description) => {
   body.classList.add('modal-open');
 
   renderSocialComments(comments);
-  uploadMoreComments();
+  uploadMoreComment();
   addEventListenerSocialCommentsLoader();
 });
 

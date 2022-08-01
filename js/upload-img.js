@@ -1,53 +1,51 @@
 import { isEscapeKey, removeEventListener } from './util.js';
-import { onEffectChange, resetSlider } from './effects.js';
+import { onChangeEffect , resetSlider } from './effects.js';
+
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const body = document.querySelector('body');
-const imgUpload = document.querySelector('.img-upload');
-const imgUploadOverlay = imgUpload.querySelector('.img-upload__overlay');
-const fileUploader = imgUpload.querySelector('#upload-file');
-const uploadCancel = imgUpload.querySelector('#upload-cancel');
-const textHashtags = imgUpload.querySelector('.text__hashtags');
-const textDescription = imgUpload.querySelector('.text__description');
-const imgUploadPreview = imgUpload.querySelector('.img-upload__preview img');
-const imgUploadEffectLevel = imgUpload.querySelector('.img-upload__effect-level');
-const scaleControlValue = imgUpload.querySelector('.scale__control--value');
-const uploadEffects = imgUpload.querySelectorAll('.effects__item .effects__radio');
+const uploadImg = document.querySelector('.img-upload');
+const uploadImgOverlay = uploadImg.querySelector('.img-upload__overlay');
+const uploadFile = uploadImg.querySelector('#upload-file');
+const uploadCancelButton = uploadImg.querySelector('#upload-cancel');
+const inputHashtag = uploadImg.querySelector('.text__hashtags');
+const textDescription = uploadImg.querySelector('.text__description');
+const uploadImgPreview = uploadImg.querySelector('.img-upload__preview img');
+const uploadImgEffectLevel = uploadImg.querySelector('.img-upload__effect-level');
+const controlScaleValue = uploadImg.querySelector('.scale__control--value');
+const uploadImgEffects = uploadImg.querySelectorAll('.effects__item .effects__radio');
 
 const initialStateUploadImgFormData = () => {
-  imgUploadPreview.style.transform = 'scale(1)';
-  imgUploadEffectLevel.classList.add('hidden');
-  scaleControlValue.value = '100%';
+  uploadImgPreview.style.transform = 'scale(1)';
+  uploadImgEffectLevel.classList.add('hidden');
+  controlScaleValue.value = '100%';
 };
 
 const resetUploadImgFormData = () => {
   resetSlider();
   initialStateUploadImgFormData();
-  fileUploader.value = '';
-  uploadEffects.forEach((element) => {
-    if (element.value === 'none') {
-      element.checked = true;
-    } else {
-      element.checked = false;
-    }
+  uploadFile.value = '';
+  uploadImgEffects.forEach((element) => {
+    element.checked = element.value === 'none';
   });
-  imgUploadPreview.style.filter = 'none';
-  textHashtags.value = '';
+  uploadImgPreview.style.filter = 'none';
+  inputHashtag.value = '';
   textDescription.value = '';
 };
 
-const modalClose = () => {
-  imgUploadOverlay.classList.add('hidden');
+const closeModal = () => {
+  uploadImgOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
 };
 
-const modalEscapeClose = (evt, eventType, handlerEventFunction) => {
+const closeModalByEscape = (evt, typeOfEvent, handleEventFunction) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    modalClose();
-    removeEventListener(document, eventType, handlerEventFunction);
+    closeModal();
+    removeEventListener(document, typeOfEvent, handleEventFunction);
   }
 };
-const handlerEventTextInput = (evt) => {
+const handleEventUploadImg = (evt) => {
   if (isEscapeKey(evt)) {
     evt.stopPropagation();
   }
@@ -56,54 +54,63 @@ const handlerEventTextInput = (evt) => {
 const handlerEventUploadImg = (evt) => {
   switch (evt.type) {
     case 'click':
-      modalClose();
-      removeEventListener(uploadCancel, 'click', handlerEventUploadImg);
+      closeModal();
+      removeEventListener(uploadCancelButton, 'click', handlerEventUploadImg);
       removeEventListener(document, 'keydown', handlerEventUploadImg);
-      uploadEffects.forEach((element) => {
-        removeEventListener(element, 'change', onEffectChange);
+      uploadImgEffects.forEach((element) => {
+        removeEventListener(element, 'change', onChangeEffect);
       });
-      removeEventListener(textHashtags, 'keydown', handlerEventTextInput);
-      removeEventListener(textDescription, 'keydown', handlerEventTextInput);
+      removeEventListener(inputHashtag, 'keydown', handleEventUploadImg);
+      removeEventListener(textDescription, 'keydown', handleEventUploadImg);
       resetUploadImgFormData();
       break;
     case 'keydown':
       if (!isEscapeKey(evt)) {
         return;
       }
-      modalEscapeClose(evt, 'keydown', handlerEventUploadImg);
-      removeEventListener(uploadCancel, 'click', handlerEventUploadImg);
-      uploadEffects.forEach((element) => {
-        removeEventListener(element, 'change', onEffectChange);
+      closeModalByEscape(evt, 'keydown', handlerEventUploadImg);
+      removeEventListener(uploadCancelButton, 'click', handlerEventUploadImg);
+      uploadImgEffects.forEach((element) => {
+        removeEventListener(element, 'change', onChangeEffect);
       });
-      removeEventListener(textHashtags, 'keydown', handlerEventTextInput);
-      removeEventListener(textDescription, 'keydown', handlerEventTextInput);
+      removeEventListener(inputHashtag, 'keydown', handleEventUploadImg);
+      removeEventListener(textDescription, 'keydown', handleEventUploadImg);
       resetUploadImgFormData();
       break;
     default:
-      modalClose();
+      closeModal();
       break;
   }
 };
 
-const handlerUploadImg = () => {
-  imgUploadOverlay.classList.remove('hidden');
+const handleUploadImg = () => {
+  uploadImgOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
+
+  const file = uploadFile.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    uploadImgPreview.src = URL.createObjectURL(file);
+  }
 
   initialStateUploadImgFormData();
 
-  uploadCancel.addEventListener('click', handlerEventUploadImg);
+  uploadCancelButton.addEventListener('click', handlerEventUploadImg);
   document.addEventListener('keydown', handlerEventUploadImg);
-  uploadEffects.forEach((element) => {
-    element.addEventListener('change', onEffectChange);
+  uploadImgEffects.forEach((element) => {
+    element.addEventListener('change', onChangeEffect);
   });
 
-  textHashtags.addEventListener('keydown', handlerEventTextInput);
-  textDescription.addEventListener('keydown', handlerEventTextInput);
+  inputHashtag.addEventListener('keydown', handleEventUploadImg);
+  textDescription.addEventListener('keydown', handleEventUploadImg);
 };
 
-fileUploader.addEventListener('change', handlerUploadImg);
+uploadFile.addEventListener('change', handleUploadImg);
 
 export {
-  modalClose,
+  closeModal,
   resetUploadImgFormData
 };

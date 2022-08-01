@@ -1,11 +1,11 @@
-import { COMMENTS_COUNTER_STEP, getInitialCommentCounterState } from './util.js';
+import { COUNT_COMMENT_STEP, getCountInitialCommentState } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
-const socialCommentCount = bigPicture.querySelector('.social__comment-count');
-const socialCommentsLoader = bigPicture.querySelector('.social__comments-loader');
+const countSocialComment = bigPicture.querySelector('.social__comment-count');
+const socialCommentLoaderButton = bigPicture.querySelector('.social__comments-loader');
 
-let initialCommentCounterState = getInitialCommentCounterState(0);
-const commentCounterStep = COMMENTS_COUNTER_STEP;
+let countInitialCommentState = getCountInitialCommentState(0);
+const countCommentStep = COUNT_COMMENT_STEP;
 
 const getCommentsData = () => {
   const socialComments = Array.from(bigPicture.querySelectorAll('.social__comment'));
@@ -17,54 +17,57 @@ const getHiddenCommentsData = () => {
   return socialHiddenComments;
 };
 
-const createSocialCommentsCounterTemplate = (initCommentCounterStep) => (
-  `${initCommentCounterStep} из <span class="comments-count"> ${getCommentsData().length} </span> комментариев`
+const createSocialCommentsCounterTemplate = (countInitCommentStep) => (
+  `${countInitCommentStep} из <span class="comments-count"> ${getCommentsData().length} </span> комментариев`
 );
 
 const clearCommentMarkupCounterState = () => {
-  socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(commentCounterStep);
+  countSocialComment.textContent = '';
+  countSocialComment.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(countCommentStep));
 };
 
-const hiddenSocialCommentsLoader = () => {
-  socialCommentsLoader.classList.add('hidden');
-  initialCommentCounterState = getInitialCommentCounterState(0);
+const hideSocialCommentsLoader = () => {
+  socialCommentLoaderButton.classList.add('hidden');
+  countInitialCommentState = getCountInitialCommentState(0);
 };
 
-const handlerSocialComments = () => {
+const handleSocialComments = () => {
   const arrSocialComments = getCommentsData();
-  const showFollowingComments = arrSocialComments.slice(initialCommentCounterState, initialCommentCounterState + commentCounterStep);
-  showFollowingComments.forEach((elem) => elem.classList.remove('hidden'));
+  const showFollowComments = arrSocialComments.slice(countInitialCommentState, countInitialCommentState + countCommentStep);
+  showFollowComments.forEach((element) => element.classList.remove('hidden'));
 
-  initialCommentCounterState += commentCounterStep;
+  countInitialCommentState += countCommentStep;
 
-  socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(arrSocialComments.length - getHiddenCommentsData().length);
+  countSocialComment.textContent = '';
+  countSocialComment.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(arrSocialComments.length - getHiddenCommentsData().length));
 
-  if (initialCommentCounterState === arrSocialComments.length || initialCommentCounterState > arrSocialComments.length) {
-    hiddenSocialCommentsLoader();
+  if (countInitialCommentState === arrSocialComments.length || countInitialCommentState > arrSocialComments.length) {
+    hideSocialCommentsLoader();
   }
 };
 
-const uploadMoreComments = () => {
+const uploadMoreComment = () => {
   const arrSocialComments = getCommentsData();
-  if (((getCommentsData().length < commentCounterStep) || (getCommentsData().length === commentCounterStep)) && (getHiddenCommentsData().length === 0)) {
-    socialCommentCount.innerHTML = createSocialCommentsCounterTemplate(getCommentsData().length);
-    hiddenSocialCommentsLoader();
+  if (((getCommentsData().length < countCommentStep) || (getCommentsData().length === countCommentStep)) && (getHiddenCommentsData().length === 0)) {
+    countSocialComment.textContent = '';
+    countSocialComment.insertAdjacentHTML('afterbegin', createSocialCommentsCounterTemplate(getCommentsData().length));
+    hideSocialCommentsLoader();
     return;
   }
   arrSocialComments
-    .slice(commentCounterStep)
+    .slice(countCommentStep)
     .forEach((elem) => elem.classList.add('hidden'));
 
-  initialCommentCounterState = getInitialCommentCounterState(0);
+  countInitialCommentState = getCountInitialCommentState(0);
 };
 
 const addEventListenerSocialCommentsLoader = () => {
-  socialCommentsLoader.addEventListener('click', handlerSocialComments);
+  socialCommentLoaderButton.addEventListener('click', handleSocialComments);
 };
 
 export {
-  uploadMoreComments,
+  uploadMoreComment,
   clearCommentMarkupCounterState,
-  handlerSocialComments,
+  handleSocialComments,
   addEventListenerSocialCommentsLoader
 };
