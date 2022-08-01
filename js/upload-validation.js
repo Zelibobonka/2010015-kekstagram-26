@@ -1,5 +1,5 @@
-import {sendData} from './api.js';
-import {showMessageOk, showMessageError} from './message.js';
+import { sendData } from './api.js';
+import { showMessageSuccess, showMessageError } from './message.js';
 
 const imgUpload = document.querySelector('.img-upload');
 const form = imgUpload.querySelector('#upload-select-image');
@@ -57,10 +57,10 @@ const blockSubmitButton = () => {
 
 const unblockSubmitButton = () => {
   submitButton.disabled = false;
-  submitButton.textContent = 'Сохранить';
+  submitButton.textContent = 'Отправить';
 };
 
-const setUserFormSubmit = (onSuccess) => {
+const setUserFormSubmit = (onSuccessModalAction, onErrorModalAction) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
@@ -69,18 +69,21 @@ const setUserFormSubmit = (onSuccess) => {
       blockSubmitButton();
       sendData(
         () => {
-          onSuccess();
-          showMessageOk();
+          onSuccessModalAction();
+          showMessageSuccess();
           unblockSubmitButton();
         },
         () => {
+          onErrorModalAction();
           showMessageError();
           unblockSubmitButton();
         },
-        new FormData(evt.target),
+        new FormData(evt.target)
       );
     }
   });
 };
 
-export {setUserFormSubmit};
+export {
+  setUserFormSubmit
+};

@@ -47,16 +47,23 @@ const modalEscapeClose = (evt, eventType, handlerEventFunction) => {
     removeEventListener(document, eventType, handlerEventFunction);
   }
 };
+const handlerEventTextInput = (evt) => {
+  if (isEscapeKey(evt)) {
+    evt.stopPropagation();
+  }
+};
 
 const handlerEventUploadImg = (evt) => {
   switch (evt.type) {
     case 'click':
       modalClose();
-      removeEventListener( uploadCancel, 'click', handlerEventUploadImg);
-      removeEventListener( document, 'keydown', handlerEventUploadImg);
+      removeEventListener(uploadCancel, 'click', handlerEventUploadImg);
+      removeEventListener(document, 'keydown', handlerEventUploadImg);
       uploadEffects.forEach((element) => {
         removeEventListener(element, 'change', onEffectChange);
       });
+      removeEventListener(textHashtags, 'keydown', handlerEventTextInput);
+      removeEventListener(textDescription, 'keydown', handlerEventTextInput);
       resetUploadImgFormData();
       break;
     case 'keydown':
@@ -68,6 +75,8 @@ const handlerEventUploadImg = (evt) => {
       uploadEffects.forEach((element) => {
         removeEventListener(element, 'change', onEffectChange);
       });
+      removeEventListener(textHashtags, 'keydown', handlerEventTextInput);
+      removeEventListener(textDescription, 'keydown', handlerEventTextInput);
       resetUploadImgFormData();
       break;
     default:
@@ -88,19 +97,13 @@ const handlerUploadImg = () => {
     element.addEventListener('change', onEffectChange);
   });
 
-  textHashtags.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.stopPropagation();
-    }
-  });
-
-  textDescription.addEventListener('keydown', (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.stopPropagation();
-    }
-  });
+  textHashtags.addEventListener('keydown', handlerEventTextInput);
+  textDescription.addEventListener('keydown', handlerEventTextInput);
 };
 
 fileUploader.addEventListener('change', handlerUploadImg);
 
-export {modalClose};
+export {
+  modalClose,
+  resetUploadImgFormData
+};

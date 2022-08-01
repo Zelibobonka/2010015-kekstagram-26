@@ -1,12 +1,9 @@
-import {
-  isEscapeKey,
-  removeEventListener,
-} from './util.js';
+import { isEscapeKey, removeEventListener } from './util.js';
 import {
   uploadMoreComments,
   clearCommentMarkupCounterState,
   handlerSocialComments,
-  addEventListenerSocialCommentsLoader,
+  addEventListenerSocialCommentsLoader
 } from './upload-more-comments.js';
 
 const body = document.querySelector('body');
@@ -33,13 +30,13 @@ const handlerEventBigPicture = (evt) => {
     case 'click':
       modalClose();
       removeEventListener(bigPictureCancel, 'click', handlerEventBigPicture);
-      removeEventListener(document, 'keydown', handlerEventBigPicture); //
-      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments); //
+      removeEventListener(document, 'keydown', handlerEventBigPicture);
+      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments);
       clearCommentMarkupCounterState();
       break;
     case 'keydown':
       modalEscapeClose(evt, 'keydown', handlerEventBigPicture);
-      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments); //
+      removeEventListener(socialCommentsLoader, 'click', handlerSocialComments);
       clearCommentMarkupCounterState();
       break;
     default:
@@ -87,5 +84,5 @@ const renderBigPicture = ((url, likes, comments, description) => {
 
 
 export {
-  renderBigPicture,
+  renderBigPicture
 };

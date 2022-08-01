@@ -1,19 +1,25 @@
-const getData = (onSuccess) => {
+const getData = (onSuccess, onFail) => {
   fetch('https://26.javascript.pages.academy/kekstagram/data')
-    .then((response) => response.json())
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        onFail('Не удалось загрузить страницу. Попробуйте ещё раз');
+      }
+    })
     .then((photo) => {
       onSuccess(photo);
+    })
+    .catch(() => {
+      onFail('Не удалось загрузить страницу. Попробуйте ещё раз');
     });
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch(
-    'https://26.javascript.pages.academy/kekstagram',
-    {
-      method: 'POST',
-      body,
-    },
-  )
+  fetch('https://26.javascript.pages.academy/kekstagram', {
+    method: 'POST',
+    body
+  })
     .then((response) => {
       if (response.ok) {
         onSuccess();
@@ -26,4 +32,7 @@ const sendData = (onSuccess, onFail, body) => {
     });
 };
 
-export {getData, sendData};
+export {
+  getData,
+  sendData
+};

@@ -9,16 +9,14 @@ const getInitialCommentCounterState = (count = 0) => {
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const removeEventListener = (whereRemoveEventListener, eventType, handlerEventFunction) => {
-  const conditionForRemove = document.querySelector('body').classList.contains('modal-open');
-  if (conditionForRemove) {
-    const element = whereRemoveEventListener;
-    element.removeEventListener(eventType, handlerEventFunction);
-  }
+  const element = whereRemoveEventListener;
+  element.removeEventListener(eventType, handlerEventFunction);
+
 };
 
 export {
   isEscapeKey,
   removeEventListener,
   COMMENTS_COUNTER_STEP,
-  getInitialCommentCounterState,
+  getInitialCommentCounterState
 };
